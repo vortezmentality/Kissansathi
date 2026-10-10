@@ -1,0 +1,1990 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>KisanSaathi - Smart APMC & Agro-Logistics</title>
+    <meta name="description" content="Bilingual mobile web platform for real APMC mandi rates, pooled transport, shared farm machinery, and IVRS offline service for Indian farmers." />
+    <meta property="og:title" content="KisanSaathi - Smart APMC & Agro-Logistics" />
+    <meta property="og:description" content="Bilingual mobile web platform for real APMC mandi rates, pooled transport, shared farm machinery, and IVRS offline service for Indian farmers." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              agri: {
+                dark: '#143D31',
+                forest: '#1B4D3E',
+                pine: '#236451',
+                leaf: '#2D6A4F',
+                light: '#E8F5E9',
+                ochre: '#D97706',
+                amber: '#F59E0B',
+                gold: '#B45309',
+                wheat: '#FEF3C7',
+                bg: '#F8FAF8',
+                card: '#FFFFFF',
+              }
+            },
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', 'system-ui', 'sans-serif'],
+              display: ['Outfit', '"Noto Sans Devanagari"', 'sans-serif'],
+              mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      :root {
+        --color-forest: #1B4D3E;
+        --color-ochre: #D97706;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+        background-color: #0F172A;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Custom scrollbars */
+      ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 4px;
+      }
+      .wave-bar {
+        animation: waveAnim 1.2s ease-in-out infinite alternate;
+      }
+      @keyframes waveAnim {
+        0% { height: 4px; }
+        100% { height: 28px; }
+      }
+      .dtmf-press:active {
+        transform: scale(0.92);
+        background-color: #E2E8F0;
+      }
+      /* Range input custom styling */
+      input[type=range] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: #E2E8F0;
+        border-radius: 9999px;
+        height: 8px;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #1B4D3E;
+        cursor: pointer;
+        border: 3px solid #FFFFFF;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      }
+    </style>
+  </head>
+  <body class="bg-slate-900 min-h-screen flex items-center justify-center p-0 sm:p-4 select-none">
+    
+    <!-- Outer Device Canvas (Centered on Desktop) -->
+    <div id="device-wrapper" class="w-full max-w-md mx-auto min-h-screen sm:min-h-[852px] sm:max-h-[890px] bg-[#F8FAF8] text-slate-800 relative sm:rounded-[36px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col sm:border-[6px] sm:border-slate-800">
+      
+      <!-- Top Mobile Status Bar -->
+      <header class="bg-[#143D31] text-white pt-2.5 pb-2 px-5 flex items-center justify-between text-xs tracking-tight shrink-0 z-30 select-none">
+        <div class="flex items-center gap-1.5 font-semibold">
+          <span id="current-clock" class="tabular-nums">09:41</span>
+          <span class="text-[10px] text-emerald-300 font-normal ml-0.5">AM</span>
+        </div>
+        <div class="hidden sm:flex items-center gap-1 bg-black/30 px-3 py-0.5 rounded-full border border-white/10">
+          <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+          <span class="text-[10px] text-white/80 font-mono">KisanSaathi 4G</span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-300">
+          <span class="text-[10px] font-mono tracking-wider">VoLTE</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+          <div class="w-5 h-2.5 border border-white/60 rounded-sm p-0.5 flex items-center">
+            <div class="h-full bg-emerald-400 rounded-2xs w-4"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- App Header: Brand Zone, Location & Bilingual Language Indicator -->
+      <section class="bg-[#1B4D3E] text-white px-4 py-3 shrink-0 shadow-md z-20 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-900 shadow-sm font-bold text-lg font-display">
+            🌾
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h1 class="text-base font-bold font-display tracking-tight text-white leading-tight">KisanSaathi</h1>
+              <span class="text-[11px] font-medium text-emerald-200">/ किसान साथी</span>
+            </div>
+            <div class="text-[11px] text-emerald-200 flex items-center gap-1">
+              <span>📍 Sanwer, Indore (MP)</span>
+              <span>·</span>
+              <span id="header-market-status" class="text-amber-300 font-medium">Mandi Open</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Toll-Free Helpline Quick Dial -->
+          <button id="header-call-btn" title="Call 1800 Helpline" class="min-h-[38px] px-2.5 py-1 bg-emerald-900/70 hover:bg-emerald-900 border border-emerald-600/60 rounded-lg text-[11px] font-semibold text-white flex items-center gap-1.5 transition-colors active:scale-95">
+            <span class="text-amber-300 text-xs">📞</span>
+            <span class="tabular-nums">1800-889</span>
+          </button>
+          <!-- SMS Notification Center Bell -->
+          <button id="header-sms-bell" title="SMS Receipts" class="relative min-h-[38px] min-w-[38px] flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors">
+            <span>💬</span>
+            <span id="sms-badge-count" class="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-slate-950 text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SMS Pop-Up Banner (Animated Push Notification from KisanSaathi) -->
+      <div id="sms-toast-banner" class="hidden transition-all duration-300 ease-out bg-slate-900 text-white mx-3 mt-2 p-3 rounded-xl shadow-xl border border-amber-500/30 z-50">
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📩</span>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-amber-400">VM-KSNATH</span>
+                <span class="text-[10px] text-slate-400 tabular-nums">Just Now</span>
+              </div>
+              <p id="sms-toast-text" class="text-xs text-slate-200 mt-0.5 leading-snug font-sans">
+                प्रिय किसान, आज इंदौर APMC में गेहूं का भाव ₹2,610/क्विंटल (+₹45) है।
+              </p>
+            </div>
+          </div>
+          <button id="dismiss-sms-toast" class="text-slate-400 hover:text-white text-xs p-1">✕</button>
+        </div>
+      </div>
+
+      <!-- Main Scrollable Screen Viewport (Screens 1 to 4) -->
+      <main id="screen-container" class="flex-1 overflow-y-auto pb-20 relative bg-[#F8FAF8]">
+        
+        <!-- SCREEN 1: MANDI BHAV (CROP PRICES) -->
+        <section id="screen-mandi-bhav" class="p-3.5 space-y-3.5">
+          <!-- Top Hero Kicker: Best Mandi Profit Insight Banner -->
+          <div class="bg-gradient-to-r from-[#1B4D3E] to-[#143D31] rounded-2xl p-3.5 text-white shadow-sm border border-emerald-900/20">
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-1.5">
+                <span class="text-amber-400 text-sm">★</span>
+                <span class="text-xs font-bold tracking-tight text-amber-300">Highest Net Profit · सर्वाधिक शुद्ध मुनाफा</span>
+              </div>
+              <span class="text-[10px] bg-amber-400/20 text-amber-200 px-2 py-0.5 rounded font-mono font-medium">Agmarknet Verified</span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div>
+                <p id="hero-best-mandi-name" class="text-sm font-semibold text-white">Indore APMC Yard (इंदौर)</p>
+                <p id="hero-best-mandi-detail" class="text-[11px] text-slate-300">Net in-hand: ₹2,470/qtl after ₹140 pooled freight</p>
+              </div>
+              <div class="text-right">
+                <span id="hero-best-mandi-gain" class="text-sm font-bold text-amber-300 tabular-nums">+₹140/qtl</span>
+                <p class="text-[10px] text-emerald-200">vs Local Sanwer Mandi</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Section: State, District, Search & Crop Tabs -->
+          <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-200/90 space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-700">
+              <span class="flex items-center gap-1.5">
+                <span>🔍</span> Mandi Bhav Filter / मंडी भाव चयन
+              </span>
+              <span class="text-[10px] text-slate-500 font-normal">Live Rates · 09 Oct 2026</span>
+            </div>
+
+            <!-- State & District Dropdowns -->
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">State / राज्य</label>
+                <select id="filter-state" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                  <option value="MP" selected>Madhya Pradesh (मध्य प्रदेश)</option>
+                  <option value="RJ">Rajasthan (राजस्थान)</option>
+                  <option value="UP">Uttar Pradesh (उत्तर प्रदेश)</option>
+                  <option value="PB">Punjab (पंजाब)</option>
+                  <option value="HR">Haryana (हरियाणा)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-slate-500 mb-1">District / जिला</label>
+                <select id="filter-district" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                </select>
+              </div>
+            </div>
+
+            <!-- Crop Selector Segmented Control -->
+            <div>
+              <label class="block text-[10px] font-medium text-slate-500 mb-1.5">Select Crop / फसल चुनें</label>
+              <div id="crop-filter-chips" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              </div>
+            </div>
+          </div>
+
+          <!-- Price Summary & Trend Banner -->
+          <div class="flex items-center justify-between px-1 text-xs">
+            <div class="text-slate-600 font-medium">
+              <span id="selected-crop-label" class="font-bold text-slate-900">Gehun (Wheat / गेहूं)</span>
+              <span class="text-slate-400">· Rates per Quintal (100kg)</span>
+            </div>
+            <button id="btn-msp-info" class="text-[11px] font-semibold text-[#1B4D3E] hover:underline flex items-center gap-1">
+              <span>Govt MSP: ₹2,275</span> ℹ️
+            </button>
+          </div>
+
+          <!-- Mandi Rate Cards Container -->
+          <div id="mandi-cards-list" class="space-y-3">
+          </div>
+
+          <!-- Quick Action to Transport -->
+          <div class="bg-amber-50 rounded-2xl p-3 border border-amber-200 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🚛</span>
+              <div>
+                <p class="text-xs font-bold text-amber-900 leading-tight">Got crops ready to sell? (फसल तैयार है?)</p>
+                <p class="text-[11px] text-amber-800">Pool your load for ₹70/bag instead of ₹1,500 full truck!</p>
+              </div>
+            </div>
+            <button id="cta-go-transport" class="px-3 py-2 bg-[#1B4D3E] text-white rounded-xl text-xs font-semibold shrink-0 shadow-sm hover:bg-[#143D31] active:scale-95 transition-all">
+              Book Pool ➔
+            </button>
+          </div>
+        </section>
+
+        <!-- SCREEN 2: MANDI EXPRESS (POOLED TRANSPORT) -->
+        <section id="screen-transport" class="p-3.5 space-y-3.5 hidden">
+          <!-- Screen Title & Value Proposition -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/90">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🚛</span>
+                <div>
+                  <h2 class="text-sm font-bold text-slate-900">Mandi Express (मंडी एक्सप्रेस)</h2>
+                  <p class="text-[11px] text-slate-500">Shared Farmer Agro-Logistics · साझा माल ढुलाई</p>
+                </div>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">
+                ⚡ Up to 60% Savings
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">
+              Never pay for an empty mini-truck. Share cargo space with nearby farmers delivering to the same APMC yard on scheduled morning runs.
+            </p>
+          </div>
+
+          <!-- Load & Cluster Input -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/90 space-y-3.5">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Step 1: Crop Load & Route (बोझ व मार्ग)</h3>
+
+            <!-- Load Stepper & Slider -->
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <span class="font-medium text-slate-700">Crop Quantity / बोरी या क्विंटल</span>
+                <span class="text-xs font-bold text-[#1B4D3E] font-mono tabular-nums">
+                  <span id="load-bags-display">15</span> Bags (बोरी) ≈ <span id="load-qtl-display">7.5</span> Qtl
+                </span>
+              </div>
+              
+              <input id="load-slider" type="range" min="5" max="60" step="5" value="15" class="w-full cursor-pointer" />
+              
+              <div class="flex items-center justify-between mt-2 text-[11px] text-slate-500">
+                <div class="flex items-center gap-1">
+                  <button id="btn-bags-minus" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold flex items-center justify-center border border-slate-200 active:scale-95">-5</button>
+                  <button id="btn-bags-plus" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold flex items-center justify-center border border-slate-200 active:scale-95">+5</button>
+                </div>
+                <span>50 kg Standard Gunny Bags</span>
+                <div class="flex items-center gap-1">
+                  <button class="preset-load px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-semibold text-slate-700" data-bags="10">10 Bags</button>
+                  <button class="preset-load px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-semibold text-slate-700" data-bags="20">20 Bags</button>
+                  <button class="preset-load px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded text-[10px] font-semibold text-slate-700" data-bags="40">40 Bags</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pickup Village Cluster -->
+            <div>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">
+                Pickup Village Hub / पिकअप क्लस्टर (गाँव)
+              </label>
+              <select id="pickup-cluster-select" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                <option value="sanwer_hub" data-dist="28">Sanwer Cluster Hub Point A (2.1 km from farm)</option>
+                <option value="depalpur_hub" data-dist="36">Depalpur Kissan Kendra (3.8 km)</option>
+                <option value="hatod_hub" data-dist="24">Hatod Village Chauraha Collection Point (1.5 km)</option>
+                <option value="manglia_hub" data-dist="18">Manglia Direct Farm Gate Pickup</option>
+              </select>
+            </div>
+
+            <!-- Destination Mandi -->
+            <div>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">
+                Destination APMC Mandi / गंतव्य मंडी
+              </label>
+              <select id="dest-mandi-select" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                <option value="indore" data-base="70" data-solobase="1500" selected>Indore APMC Grain Yard (28 km)</option>
+                <option value="ujjain" data-base="85" data-solobase="1800">Ujjain Krishi Upaj Mandi (35 km)</option>
+                <option value="dewas" data-base="95" data-solobase="2100">Dewas Krishi Mandi (42 km)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Cost Calculator (Solo vs KisanSaathi Pooled) -->
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/90 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Step 2: Cost & Savings Comparison</h3>
+              <span class="text-[10px] text-amber-700 bg-amber-100 font-bold px-2 py-0.5 rounded-full">
+                Savings Calculator · बचत कैलकुलेटर
+              </span>
+            </div>
+
+            <!-- Comparison Columns -->
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div class="bg-red-50/70 border border-red-200/80 rounded-2xl p-3 text-center">
+                <span class="text-[10px] font-bold text-red-700 block uppercase tracking-wide">Solo Mini-Truck</span>
+                <span class="text-[10px] text-slate-500 block mb-1">अकेले गाड़ी भाड़ा</span>
+                <span id="solo-cost-display" class="text-lg font-extrabold text-red-600 font-mono tabular-nums">₹1,500</span>
+                <div class="text-[10px] text-slate-500 mt-1 border-t border-red-200/60 pt-1">
+                  You bear full truck cost even if 70% empty
+                </div>
+              </div>
+
+              <div class="bg-emerald-50 border border-emerald-300 rounded-2xl p-3 text-center relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 w-12 h-12 bg-emerald-200/50 rounded-full"></div>
+                <span class="text-[10px] font-bold text-emerald-800 block uppercase tracking-wide">KisanSaathi Pooled</span>
+                <span class="text-[10px] text-emerald-700 block mb-1">साझा ढुलाई (₹70/बोरी)</span>
+                <span id="pooled-cost-display" class="text-lg font-extrabold text-emerald-800 font-mono tabular-nums">₹1,050</span>
+                <div class="text-[10px] text-emerald-700 mt-1 border-t border-emerald-200 pt-1 font-medium">
+                  Loading & Unloading at APMC gate included
+                </div>
+              </div>
+            </div>
+
+            <!-- Savings Banner -->
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 p-3 rounded-2xl flex items-center justify-between font-sans shadow-sm">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">💰</span>
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-tight text-slate-900 block">Your Direct Farmer Savings</span>
+                  <span class="text-[11px] text-amber-950">आपकी शुद्ध बचत (जेब में बचे पैसे)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span id="net-savings-display" class="text-xl font-extrabold text-slate-950 font-mono tabular-nums">₹450</span>
+                <span id="savings-percent-display" class="block text-[11px] font-bold text-amber-950">(30% कम खर्च)</span>
+              </div>
+            </div>
+
+            <!-- Co-pooling Capacity Fill Bar -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <div class="flex items-center justify-between text-[11px] mb-1">
+                <span class="font-semibold text-slate-700">Vehicle Co-Pooling Status</span>
+                <span class="font-bold text-[#1B4D3E]">75% Full · 3 Farmers Joined</span>
+              </div>
+              <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden flex">
+                <div class="bg-[#1B4D3E] h-full" style="width: 50%" title="Existing loads"></div>
+                <div class="bg-amber-500 h-full animate-pulse" style="width: 25%" title="Your load"></div>
+                <div class="bg-slate-300 h-full" style="width: 25%" title="Remaining capacity"></div>
+              </div>
+              <p class="text-[10px] text-slate-500 mt-1.5 flex items-center gap-1">
+                <span>🤝</span> Sharing route with <strong>Ramesh Patidar</strong> (25 bags) & <strong>Devendra</strong> (20 bags).
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3: Payment & Confirmation -->
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/90 space-y-3">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Step 3: Payment & Dispatch (भुगतान व पुष्टि)</h3>
+
+            <!-- Payment Toggle -->
+            <div class="space-y-2">
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-emerald-300 bg-emerald-50/60 cursor-pointer">
+                <input type="radio" name="pay-option" value="cod" checked class="text-[#1B4D3E] focus:ring-[#1B4D3E]" />
+                <div class="text-xs">
+                  <span class="font-bold text-slate-900 block">Cash on Mandi Gate (नकद भुगतान)</span>
+                  <span class="text-slate-500 text-[11px]">Pay the driver after crop is weighed & unloaded at APMC yard</span>
+                </div>
+              </label>
+              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                <input type="radio" name="pay-option" value="arhat" class="text-[#1B4D3E] focus:ring-[#1B4D3E]" />
+                <div class="text-xs">
+                  <span class="font-bold text-slate-900 block">Deduct from Arhat Slip (आढ़त पर्ची से कटौती)</span>
+                  <span class="text-slate-500 text-[11px]">Freight deducted directly by commission agent on sale</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Booking Button -->
+            <button id="btn-confirm-transport-booking" class="w-full py-3.5 bg-[#1B4D3E] hover:bg-[#143D31] text-white rounded-xl text-sm font-bold shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+              <span>🚚</span>
+              <span>Confirm Pooled Slot / स्लॉट सुरक्षित करें</span>
+            </button>
+          </div>
+
+          <!-- Live Driver Dispatch Tracking Card -->
+          <div id="transport-active-card" class="bg-white rounded-2xl p-4 shadow-sm border-2 border-emerald-500 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Active Booking #KS-7821</span>
+              </div>
+              <span class="text-[10px] bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded-full">
+                Driver Dispatched
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-b border-slate-100 py-2.5">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-lg">
+                  👨‍✈️
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">Mahinder Singh (महिंदर सिंह)</h4>
+                  <p class="text-[11px] text-slate-500">Bolero Maxi Truck · MP-09-GA-4821</p>
+                  <p class="text-[10px] text-amber-700 font-medium">★ 4.9 (840+ Mandi Deliveries)</p>
+                </div>
+              </div>
+              <button id="call-driver-btn" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95">
+                <span>📞</span> Call
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between text-xs bg-slate-50 p-2.5 rounded-xl">
+              <div>
+                <span class="text-slate-500 block text-[10px]">Pickup ETA (पहुंचने का समय)</span>
+                <span id="eta-countdown" class="font-bold text-slate-900 font-mono text-sm">38 Mins</span>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-500 block text-[10px]">Cluster Stop</span>
+                <span class="font-semibold text-slate-800">Sanwer Point A</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 3: SHARED MACHINERY -->
+        <section id="screen-machinery" class="p-3.5 space-y-3.5 hidden">
+          <!-- Banner & Cluster Discount Toggle -->
+          <div class="bg-gradient-to-br from-[#1B4D3E] to-[#143D31] rounded-2xl p-4 text-white shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-sm font-bold text-white">Shared Agri Machinery (साझा कृषि यंत्र)</h2>
+                <p class="text-[11px] text-emerald-200">Rent high-capacity equipment with certified operators</p>
+              </div>
+              <span class="text-2xl">🚜</span>
+            </div>
+
+            <!-- "Join Neighbor Cluster Slot" Toggle -->
+            <div class="bg-black/20 backdrop-blur-sm rounded-xl p-3 border border-white/10 flex items-center justify-between gap-3">
+              <div class="space-y-0.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-amber-400 text-xs">⚡</span>
+                  <span class="text-xs font-bold text-amber-300">Join Neighbor Cluster Slot</span>
+                </div>
+                <p class="text-[11px] text-slate-200 leading-tight">
+                  पड़ोसी किसान समूह में शामिल हों — Save 15% relocation fees!
+                </p>
+              </div>
+              
+              <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                <input id="cluster-discount-toggle" type="checkbox" checked class="sr-only peer" />
+                <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+              </label>
+            </div>
+
+            <!-- Cluster Notification Note -->
+            <div id="cluster-active-note" class="text-[11px] text-amber-200 bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/30 flex items-center gap-1.5">
+              <span>🌾</span>
+              <span>Sanwer North Cluster: 2 farmers active tomorrow. <strong>15% Automated Discount Applied!</strong></span>
+            </div>
+          </div>
+
+          <!-- Equipment Cards Grid -->
+          <div class="space-y-3" id="machinery-cards-container">
+          </div>
+
+          <!-- Machine Booking Modal -->
+          <div id="machine-booking-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl p-4 space-y-3.5 max-h-[90vh] overflow-y-auto">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <div class="flex items-center gap-2">
+                  <span id="modal-machine-icon" class="text-2xl">🚜</span>
+                  <div>
+                    <h3 id="modal-machine-name" class="text-sm font-bold text-slate-900">Mahindra 45HP Tractor</h3>
+                    <p class="text-[11px] text-slate-500">Booking Confirmation & Slot Schedule</p>
+                  </div>
+                </div>
+                <button id="close-machine-modal" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200">✕</button>
+              </div>
+
+              <!-- Booking Form -->
+              <div class="space-y-3 text-xs">
+                <div>
+                  <label class="block font-medium text-slate-600 mb-1">Service Date / कार्य की तारीख</label>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button class="date-chip py-2 rounded-xl border border-[#1B4D3E] bg-emerald-50 text-[#1B4D3E] font-bold text-center" data-date="Today">Today (आज)</button>
+                    <button class="date-chip py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-center" data-date="Tomorrow">Tomorrow (कल)</button>
+                    <button class="date-chip py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-center" data-date="DayAfter">11 Oct (परसों)</button>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="font-medium text-slate-600">Hours Needed / आवश्यक समय (घंटे)</label>
+                    <span id="modal-hours-display" class="font-bold text-[#1B4D3E] font-mono text-sm">3 Hours</span>
+                  </div>
+                  <input id="modal-hours-slider" type="range" min="1" max="10" step="1" value="3" class="w-full cursor-pointer" />
+                </div>
+
+                <!-- Price Summary -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5 font-mono text-xs">
+                  <div class="flex justify-between text-slate-600">
+                    <span>Base Hourly Rate:</span>
+                    <span id="modal-base-rate">₹650/hr</span>
+                  </div>
+                  <div id="modal-discount-row" class="flex justify-between text-emerald-700 font-bold">
+                    <span>Cluster Discount (-15%):</span>
+                    <span id="modal-discount-amt">-₹98/hr</span>
+                  </div>
+                  <div class="flex justify-between text-slate-600">
+                    <span>Driver & Fuel:</span>
+                    <span class="text-emerald-700 font-bold">Included (शामिल)</span>
+                  </div>
+                  <div class="border-t border-slate-200 pt-1.5 flex justify-between text-sm font-extrabold text-slate-900">
+                    <span>Total Estimate:</span>
+                    <span id="modal-total-cost" class="text-[#1B4D3E]">₹1,656</span>
+                  </div>
+                </div>
+
+                <div class="text-[11px] text-slate-500 bg-amber-50 p-2.5 rounded-lg border border-amber-200 flex items-center gap-1.5">
+                  <span>ℹ️</span>
+                  <span>Payment is made on-site after job completion in your field.</span>
+                </div>
+
+                <button id="btn-submit-machine-booking" class="w-full py-3 bg-[#1B4D3E] hover:bg-[#143D31] text-white rounded-xl font-bold text-xs shadow-md active:scale-95 transition-all">
+                  Confirm Machine Booking / बुकिंग पक्की करें
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 4: FEATURE PHONE / IVRS SIMULATOR -->
+        <section id="screen-ivrs" class="p-3.5 space-y-3.5 hidden">
+          <!-- Screen Introduction -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/90 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">📞</span>
+                <div>
+                  <h2 class="text-sm font-bold text-slate-900">Feature Phone IVRS Simulator</h2>
+                  <p class="text-[11px] text-slate-500">Offline Toll-Free Voice & SMS Engine · 1800-889-4455</p>
+                </div>
+              </div>
+              <span class="text-[10px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded border border-slate-200">
+                100% Offline Accessible
+              </span>
+            </div>
+            <p class="text-xs text-slate-600">
+              For farmers without 4G smartphones: A simple <strong>free missed call</strong> triggers an automated Hindi voice callback with live Mandi Bhav and instant SMS dispatch.
+            </p>
+          </div>
+
+          <!-- Feature Phone Chassis Mockup -->
+          <div class="bg-gradient-to-b from-slate-800 to-slate-950 p-4 rounded-3xl shadow-2xl border-4 border-slate-700 text-white max-w-xs mx-auto space-y-3">
+            
+            <!-- Ear Speaker & Brand -->
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-12 h-1 bg-slate-600 rounded-full"></div>
+              <span class="text-[9px] font-mono tracking-widest text-slate-400 uppercase">NOKIA RURAL · BHARAT 4G</span>
+            </div>
+
+            <!-- Color LCD Screen Display -->
+            <div class="bg-[#11231D] border-2 border-slate-600 rounded-xl p-3 min-h-[170px] flex flex-col justify-between relative overflow-hidden font-mono shadow-inner">
+              
+              <!-- LCD Status Bar -->
+              <div class="flex items-center justify-between text-[10px] text-emerald-400 border-b border-emerald-900/60 pb-1">
+                <span class="font-bold">4G BSNL</span>
+                <span id="ivrs-lcd-time">09:41</span>
+                <span>🔋 85%</span>
+              </div>
+
+              <!-- LCD Dynamic State -->
+              <div id="lcd-state-content" class="my-auto py-2 text-center space-y-1.5">
+                <!-- Idle State -->
+                <div id="lcd-idle-view" class="space-y-1">
+                  <div class="text-2xl animate-bounce">🌾</div>
+                  <p class="text-xs font-bold text-amber-300">KisanSaathi Helpline</p>
+                  <p class="text-[11px] text-emerald-300 font-sans">टोल-फ्री मिस्ड कॉल दें</p>
+                  <div class="bg-emerald-950/80 px-2 py-1 rounded text-[11px] text-white border border-emerald-800/80 font-mono tracking-wider font-bold">
+                    1800-889-4455
+                  </div>
+                </div>
+
+                <!-- Dialing Outgoing State -->
+                <div id="lcd-calling-view" class="hidden space-y-1">
+                  <div class="text-xl">📲</div>
+                  <p class="text-xs font-bold text-amber-300">Dialing Toll-Free...</p>
+                  <p class="text-[11px] text-white font-mono">1800-889-4455</p>
+                  <p id="lcd-calling-sub" class="text-[10px] text-emerald-400 font-sans">Ringing (घंटी जा रही है)...</p>
+                </div>
+
+                <!-- Incoming Automated Callback State -->
+                <div id="lcd-incoming-view" class="hidden space-y-1.5 animate-pulse">
+                  <div class="text-2xl">📞</div>
+                  <p class="text-[11px] font-bold text-emerald-300">Incoming Callback</p>
+                  <p class="text-xs font-bold text-white font-mono">KisanSaathi (1800)</p>
+                  <div class="flex items-center justify-center gap-2 pt-1 font-sans text-xs">
+                    <button id="btn-answer-call" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold">Answer (उठाएं)</button>
+                    <button id="btn-decline-call" class="px-2 py-1 bg-red-600 hover:bg-red-500 text-white rounded font-bold">Decline</button>
+                  </div>
+                </div>
+
+                <!-- Active In-Call State with Waveform -->
+                <div id="lcd-incall-view" class="hidden space-y-1 text-left">
+                  <div class="flex items-center justify-between text-[10px] text-emerald-300 font-mono">
+                    <span>CALL ACTIVE</span>
+                    <span id="call-timer" class="font-bold">00:05</span>
+                  </div>
+
+                  <!-- Waveform Animation -->
+                  <div class="flex items-center justify-center gap-1 h-7 my-1">
+                    <div class="w-1 bg-emerald-400 rounded-full wave-bar" style="animation-delay: 0.1s"></div>
+                    <div class="w-1 bg-amber-400 rounded-full wave-bar" style="animation-delay: 0.3s"></div>
+                    <div class="w-1 bg-emerald-400 rounded-full wave-bar" style="animation-delay: 0.2s"></div>
+                    <div class="w-1 bg-amber-400 rounded-full wave-bar" style="animation-delay: 0.5s"></div>
+                    <div class="w-1 bg-emerald-400 rounded-full wave-bar" style="animation-delay: 0.4s"></div>
+                    <div class="w-1 bg-amber-400 rounded-full wave-bar" style="animation-delay: 0.6s"></div>
+                  </div>
+
+                  <!-- Voice Transcription -->
+                  <div class="bg-black/40 p-1.5 rounded border border-emerald-900/80 max-h-16 overflow-y-auto">
+                    <p id="lcd-voice-transcript" class="text-[10px] text-emerald-200 leading-tight font-sans">
+                      "गेहूं भाव के लिए 1 दबाएं, सरसों के लिए 2 दबाएं..."
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LCD Softkeys -->
+              <div class="flex items-center justify-between text-[9px] text-slate-400 border-t border-emerald-900/60 pt-1 font-sans">
+                <span id="lcd-left-softkey">Options</span>
+                <span id="lcd-right-softkey">Back</span>
+              </div>
+            </div>
+
+            <!-- Physical Call / End Buttons -->
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button id="btn-physical-call" class="py-2.5 bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all">
+                <span>📞</span>
+                <span>Give Missed Call</span>
+              </button>
+              <button id="btn-physical-end" class="py-2.5 bg-red-700 hover:bg-red-600 active:bg-red-800 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all">
+                <span>📴</span>
+                <span>End Call (काटें)</span>
+              </button>
+            </div>
+
+            <!-- DTMF Numeric Keypad -->
+            <div class="grid grid-cols-3 gap-1.5 pt-1 font-mono text-center select-none">
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="1">
+                <span class="text-sm font-bold text-white leading-none">1</span>
+                <span class="text-[8px] text-slate-400 leading-none">🌾 Gehun</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="2">
+                <span class="text-sm font-bold text-white leading-none">2</span>
+                <span class="text-[8px] text-slate-400 leading-none">🌱 Sarson</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="3">
+                <span class="text-sm font-bold text-white leading-none">3</span>
+                <span class="text-[8px] text-slate-400 leading-none">🌿 Chana</span>
+              </button>
+
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="4">
+                <span class="text-sm font-bold text-white leading-none">4</span>
+                <span class="text-[8px] text-slate-400 leading-none">🚚 Transport</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="5">
+                <span class="text-sm font-bold text-white leading-none">5</span>
+                <span class="text-[8px] text-slate-400 leading-none">🚜 Machine</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="6">
+                <span class="text-sm font-bold text-white leading-none">6</span>
+                <span class="text-[8px] text-slate-400 leading-none">MNO</span>
+              </button>
+
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="7">
+                <span class="text-sm font-bold text-white leading-none">7</span>
+                <span class="text-[8px] text-slate-400 leading-none">PQRS</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="8">
+                <span class="text-sm font-bold text-white leading-none">8</span>
+                <span class="text-[8px] text-slate-400 leading-none">TUV</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="9">
+                <span class="text-sm font-bold text-white leading-none">9</span>
+                <span class="text-[8px] text-slate-400 leading-none">WXYZ</span>
+              </button>
+
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="*">
+                <span class="text-sm font-bold text-white leading-none">*</span>
+                <span class="text-[8px] text-slate-400 leading-none">Repeat</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="0">
+                <span class="text-sm font-bold text-white leading-none">0</span>
+                <span class="text-[8px] text-slate-400 leading-none">Agent</span>
+              </button>
+              <button class="dtmf-btn dtmf-press bg-slate-800 hover:bg-slate-700 py-2.5 rounded-lg border border-slate-700 flex flex-col items-center justify-center" data-key="#">
+                <span class="text-sm font-bold text-white leading-none">#</span>
+                <span class="text-[8px] text-slate-400 leading-none">SMS Send</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step Guide -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/90 space-y-2">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">How Offline Workflow Works (प्रक्रिया)</h3>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-[#1B4D3E] font-bold flex items-center justify-center shrink-0 text-[10px]">1</span>
+                <p><strong>Give Missed Call:</strong> Farmer dials 1800-889-4455. Call disconnects automatically after 2 rings (Zero cost to farmer).</p>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-[#1B4D3E] font-bold flex items-center justify-center shrink-0 text-[10px]">2</span>
+                <p><strong>Automated IVRS Call-Back:</strong> Within 3 seconds, system calls farmer back and reads Mandi rates in clear local Hindi.</p>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-[#1B4D3E] font-bold flex items-center justify-center shrink-0 text-[10px]">3</span>
+                <p><strong>SMS Dispatch:</strong> An instant official receipt is sent to the phone containing rates & transport booking confirmation.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SMS Receipt Inbox -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/90 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">SMS Inbox (प्राप्त संदेश)</h3>
+              <span class="text-[10px] text-slate-400">Official Agmarknet Gateway</span>
+            </div>
+            
+            <div id="sms-inbox-list" class="space-y-2">
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- BOTTOM NAVIGATION BAR (Fixed at bottom) -->
+      <nav class="bg-white/95 backdrop-blur-md border-t border-slate-200/90 py-1.5 px-3 flex items-center justify-around shrink-0 z-40 select-none shadow-[0_-4px_16px_rgba(0,0,0,0.03)]">
+        
+        <!-- Tab 1: Mandi Bhav -->
+        <button id="nav-btn-bhav" class="nav-tab-btn flex-1 flex flex-col items-center py-1 text-[#1B4D3E] font-semibold transition-transform active:scale-95" data-screen="mandi-bhav">
+          <div class="w-6 h-6 flex items-center justify-center text-lg">📈</div>
+          <span class="text-[10px] mt-0.5 tracking-tight font-bold">Mandi Bhav</span>
+          <span class="text-[9px] text-slate-500 font-normal -mt-0.5">मंडी भाव</span>
+          <span class="tab-indicator w-1 h-1 bg-[#1B4D3E] rounded-full mt-0.5"></span>
+        </button>
+
+        <!-- Tab 2: Mandi Express -->
+        <button id="nav-btn-transport" class="nav-tab-btn flex-1 flex flex-col items-center py-1 text-slate-500 hover:text-slate-800 transition-transform active:scale-95" data-screen="transport">
+          <div class="w-6 h-6 flex items-center justify-center text-lg">🚛</div>
+          <span class="text-[10px] mt-0.5 tracking-tight font-bold">Mandi Express</span>
+          <span class="text-[9px] text-slate-400 font-normal -mt-0.5">साझा ढुलाई</span>
+          <span class="tab-indicator w-1 h-1 bg-transparent rounded-full mt-0.5"></span>
+        </button>
+
+        <!-- Tab 3: Shared Machinery -->
+        <button id="nav-btn-machinery" class="nav-tab-btn flex-1 flex flex-col items-center py-1 text-slate-500 hover:text-slate-800 transition-transform active:scale-95" data-screen="machinery">
+          <div class="w-6 h-6 flex items-center justify-center text-lg">🚜</div>
+          <span class="text-[10px] mt-0.5 tracking-tight font-bold">Machinery</span>
+          <span class="text-[9px] text-slate-400 font-normal -mt-0.5">साझा यंत्र</span>
+          <span class="tab-indicator w-1 h-1 bg-transparent rounded-full mt-0.5"></span>
+        </button>
+
+        <!-- Tab 4: IVRS Simulator -->
+        <button id="nav-btn-ivrs" class="nav-tab-btn flex-1 flex flex-col items-center py-1 text-slate-500 hover:text-slate-800 transition-transform active:scale-95" data-screen="ivrs">
+          <div class="w-6 h-6 flex items-center justify-center text-lg">📞</div>
+          <span class="text-[10px] mt-0.5 tracking-tight font-bold">IVRS Phone</span>
+          <span class="text-[9px] text-slate-400 font-normal -mt-0.5">कॉल सेवा</span>
+          <span class="tab-indicator w-1 h-1 bg-transparent rounded-full mt-0.5"></span>
+        </button>
+      </nav>
+
+    </div>
+
+    <!-- PURE JAVASCRIPT & AUDIO ENGINE -->
+    <script>
+      // 1. DATA STORES
+      const CROPS_DATA = {
+        gehun: {
+          id: 'gehun',
+          nameEn: 'Wheat (Gehun)',
+          nameHi: 'गेहूं',
+          icon: '🌾',
+          msp: 2275,
+          defaultBags: 20,
+          mandis: [
+            {
+              id: 'indore_apmc',
+              name: 'Indore APMC Yard (छावनी मंडी)',
+              district: 'Indore',
+              state: 'MP',
+              distanceKm: 28,
+              minPrice: 2420,
+              maxPrice: 2750,
+              modalPrice: 2610,
+              trend: 45,
+              arrivals: '1,840 Bags',
+              quality: 'Lokwan Grade-1 (लोकवन)',
+              transportCostSolo: 1500,
+              transportCostPooled: 70,
+              isTopProfit: true,
+              profitNote: '★ Highest Net Profit: Net ₹2,470/qtl in-hand (+₹140 vs Sanwer)'
+            },
+            {
+              id: 'ujjain_apmc',
+              name: 'Ujjain Krishi Upaj Mandi (उज्जैन)',
+              district: 'Ujjain',
+              state: 'MP',
+              distanceKm: 35,
+              minPrice: 2380,
+              maxPrice: 2690,
+              modalPrice: 2540,
+              trend: -20,
+              arrivals: '920 Bags',
+              quality: 'Mill Quality (मिल क्वालिटी)',
+              transportCostSolo: 1800,
+              transportCostPooled: 85,
+              isTopProfit: false,
+              profitNote: 'Net ₹2,370/qtl after freight'
+            },
+            {
+              id: 'dewas_apmc',
+              name: 'Dewas Krishi Mandi (देवास)',
+              district: 'Dewas',
+              state: 'MP',
+              distanceKm: 42,
+              minPrice: 2400,
+              maxPrice: 2710,
+              modalPrice: 2580,
+              trend: 15,
+              arrivals: '640 Bags',
+              quality: 'Malavraj Sharbati',
+              transportCostSolo: 2000,
+              transportCostPooled: 95,
+              isTopProfit: false,
+              profitNote: 'Net ₹2,390/qtl after freight'
+            },
+            {
+              id: 'sanwer_sub_mandi',
+              name: 'Sanwer Local Sub-Yard (सांवेर उपमंडी)',
+              district: 'Indore Rural',
+              state: 'MP',
+              distanceKm: 4,
+              minPrice: 2350,
+              maxPrice: 2520,
+              modalPrice: 2470,
+              trend: 0,
+              arrivals: '310 Bags',
+              quality: 'Standard Mix',
+              transportCostSolo: 500,
+              transportCostPooled: 40,
+              isTopProfit: false,
+              profitNote: 'Zero long-haul travel but modal rate is ₹140 lower'
+            }
+          ]
+        },
+        sarson: {
+          id: 'sarson',
+          nameEn: 'Mustard (Sarson)',
+          nameHi: 'सरसों',
+          icon: '🌱',
+          msp: 5650,
+          defaultBags: 15,
+          mandis: [
+            {
+              id: 'indore_apmc',
+              name: 'Indore APMC Yard (इंदौर)',
+              district: 'Indore',
+              state: 'MP',
+              distanceKm: 28,
+              minPrice: 5250,
+              maxPrice: 5880,
+              modalPrice: 5640,
+              trend: 90,
+              arrivals: '850 Bags',
+              quality: '42% Oil Content (बोल्ड)',
+              transportCostSolo: 1500,
+              transportCostPooled: 70,
+              isTopProfit: true,
+              profitNote: '★ Highest Net Profit: ₹5,500/qtl in-hand (Strong oil mill demand)'
+            },
+            {
+              id: 'kota_apmc',
+              name: 'Kota Mandi Samiti (भामाशाह कोटा)',
+              district: 'Kota',
+              state: 'RJ',
+              distanceKm: 210,
+              minPrice: 5300,
+              maxPrice: 5920,
+              modalPrice: 5710,
+              trend: 110,
+              arrivals: '2,100 Bags',
+              quality: 'Premium Grade-A',
+              transportCostSolo: 4500,
+              transportCostPooled: 210,
+              isTopProfit: false,
+              profitNote: 'High price but distance increases freight cost'
+            },
+            {
+              id: 'ujjain_apmc',
+              name: 'Ujjain Mandi (उज्जैन)',
+              district: 'Ujjain',
+              state: 'MP',
+              distanceKm: 35,
+              minPrice: 5180,
+              maxPrice: 5750,
+              modalPrice: 5520,
+              trend: -35,
+              arrivals: '420 Bags',
+              quality: 'Standard Mustard',
+              transportCostSolo: 1800,
+              transportCostPooled: 85,
+              isTopProfit: false,
+              profitNote: 'Net ₹5,350/qtl'
+            }
+          ]
+        },
+        chana: {
+          id: 'chana',
+          nameEn: 'Gram (Chana)',
+          nameHi: 'चना',
+          icon: '🌿',
+          msp: 5440,
+          defaultBags: 15,
+          mandis: [
+            {
+              id: 'indore_apmc',
+              name: 'Indore APMC Yard (इंदौर)',
+              district: 'Indore',
+              state: 'MP',
+              distanceKm: 28,
+              minPrice: 5800,
+              maxPrice: 6350,
+              modalPrice: 6120,
+              trend: 80,
+              arrivals: '1,100 Bags',
+              quality: 'Desi Chana (देसी चना)',
+              transportCostSolo: 1500,
+              transportCostPooled: 70,
+              isTopProfit: true,
+              profitNote: '★ Highest Realization: ₹5,980/qtl in-hand'
+            },
+            {
+              id: 'dewas_apmc',
+              name: 'Dewas Krishi Mandi (देवास)',
+              district: 'Dewas',
+              state: 'MP',
+              distanceKm: 42,
+              minPrice: 5820,
+              maxPrice: 6390,
+              modalPrice: 6160,
+              trend: 95,
+              arrivals: '510 Bags',
+              quality: 'Vishal Chana (विशाल चना)',
+              transportCostSolo: 2000,
+              transportCostPooled: 95,
+              isTopProfit: false,
+              profitNote: 'Net ₹5,970/qtl'
+            },
+            {
+              id: 'ujjain_apmc',
+              name: 'Ujjain Mandi (उज्जैन)',
+              district: 'Ujjain',
+              state: 'MP',
+              distanceKm: 35,
+              minPrice: 5750,
+              maxPrice: 6280,
+              modalPrice: 6040,
+              trend: -15,
+              arrivals: '780 Bags',
+              quality: 'Dollar Chana',
+              transportCostSolo: 1800,
+              transportCostPooled: 85,
+              isTopProfit: false,
+              profitNote: 'Net ₹5,870/qtl'
+            }
+          ]
+        },
+        aloo: {
+          id: 'aloo',
+          nameEn: 'Potato (Aloo)',
+          nameHi: 'आलू',
+          icon: '🥔',
+          msp: 0,
+          defaultBags: 40,
+          mandis: [
+            {
+              id: 'indore_apmc',
+              name: 'Indore Devi Ahilya Mandi (इंदौर)',
+              district: 'Indore',
+              state: 'MP',
+              distanceKm: 28,
+              minPrice: 1100,
+              maxPrice: 1650,
+              modalPrice: 1420,
+              trend: 50,
+              arrivals: '3,400 Bags',
+              quality: 'Jyoti / Pukhraj Fresh',
+              transportCostSolo: 1500,
+              transportCostPooled: 70,
+              isTopProfit: true,
+              profitNote: '★ Top Profit: Highest volume potato market in central India'
+            },
+            {
+              id: 'agra_apmc',
+              name: 'Agra Mandi Yard (आगरा)',
+              district: 'Agra',
+              state: 'UP',
+              distanceKm: 580,
+              minPrice: 1050,
+              maxPrice: 1580,
+              modalPrice: 1360,
+              trend: -40,
+              arrivals: '5,600 Bags',
+              quality: 'Cold Storage LR',
+              transportCostSolo: 8000,
+              transportCostPooled: 350,
+              isTopProfit: false,
+              profitNote: 'Large stock arrivals causing price drop'
+            }
+          ]
+        },
+        dhan: {
+          id: 'dhan',
+          nameEn: 'Paddy (Dhan)',
+          nameHi: 'धान',
+          icon: '🌾',
+          msp: 2320,
+          defaultBags: 25,
+          mandis: [
+            {
+              id: 'indore_apmc',
+              name: 'Indore Mandi (इंदौर)',
+              district: 'Indore',
+              state: 'MP',
+              distanceKm: 28,
+              minPrice: 2183,
+              maxPrice: 2450,
+              modalPrice: 2320,
+              trend: 25,
+              arrivals: '980 Bags',
+              quality: 'Kranti Sugandha (क्रांति)',
+              transportCostSolo: 1500,
+              transportCostPooled: 70,
+              isTopProfit: true,
+              profitNote: '★ Highest Local Net: Stable mill procurement'
+            },
+            {
+              id: 'karnal_apmc',
+              name: 'Karnal Grain Market (करनाल)',
+              district: 'Karnal',
+              state: 'HR',
+              distanceKm: 780,
+              minPrice: 3400,
+              maxPrice: 4150,
+              modalPrice: 3880,
+              trend: 120,
+              arrivals: '4,200 Bags',
+              quality: '1121 Super Basmati',
+              transportCostSolo: 12000,
+              transportCostPooled: 450,
+              isTopProfit: false,
+              profitNote: 'Basmati export hub'
+            }
+          ]
+        }
+      };
+
+      const MACHINERY_DATA = [
+        {
+          id: 'tractor_45hp',
+          nameEn: 'Mahindra 575 DI Tractor (45 HP)',
+          nameHi: 'महिंद्रा 575 DI ट्रैक्टर (45 HP)',
+          icon: '🚜',
+          category: 'Ploughing & Haulage (जुताई व ढुलाई)',
+          baseHourlyRate: 650,
+          specs: '45 HP · Double Clutch · Power Steering',
+          features: 'Driver Operator & Fuel Included · 2.5 Acre/hr',
+          rating: '4.8 (120 bookings)',
+          neighborBooked: 'Ramesh Patidar (Ward 3, Tomorrow 7AM)'
+        },
+        {
+          id: 'rotavator_7ft',
+          nameEn: 'Shaktiman 7ft Heavy Duty Rotavator',
+          nameHi: 'शक्तिमान 7-फिट रोटावेटर',
+          icon: '⚙️',
+          category: 'Soil Pulverization (मिट्टी बारीक करना)',
+          baseHourlyRate: 400,
+          specs: '48 Boron Blades · Multi-Speed Gearbox',
+          features: 'Attaches to 45-55 HP Tractors · Operator included',
+          rating: '4.9 (88 bookings)',
+          neighborBooked: 'Babulal Yadav (Sanwer North)'
+        },
+        {
+          id: 'combine_harvester',
+          nameEn: 'Preet 987 Combine Harvester',
+          nameHi: 'प्रीत 987 कम्बाइन हार्वेस्टर',
+          icon: '🌾',
+          category: 'Harvesting & Threshing (कटाई व गहाई)',
+          baseHourlyRate: 1800,
+          specs: '14ft Cutter Bar · Straw Chopper · 2.2T Tank',
+          features: 'Complete Field Clearance in 45 min/acre',
+          rating: '4.9 (240 bookings)',
+          neighborBooked: 'Pramod Patel (Adjacent farm, 10 Oct)'
+        },
+        {
+          id: 'laser_leveller',
+          nameEn: 'Dual-Slope Laser Land Leveller',
+          nameHi: 'लेजर लैंड लेवलर (समतलीकरण)',
+          icon: '📐',
+          category: 'Precision Water Saving (जल संरक्षण)',
+          baseHourlyRate: 550,
+          specs: 'Transmitter ±2mm Accuracy · Hydraulic Blade',
+          features: 'Reduces irrigation water usage by 30%',
+          rating: '4.7 (64 bookings)',
+          neighborBooked: 'Cluster sharing with 3 farms'
+        },
+        {
+          id: 'multi_thresher',
+          nameEn: 'Tokri Model Multi-Crop Thresher',
+          nameHi: 'टोकरी मॉडल मल्टी-क्रॉप थ्रेशर',
+          icon: '⚡',
+          category: 'Grain Separation (गेहूं, चना, सरसों)',
+          baseHourlyRate: 480,
+          specs: '12-15 Quintals / Hour Capacity · Dual Fan Cleaner',
+          features: 'Minimal grain breakage (<0.5%)',
+          rating: '4.8 (95 bookings)',
+          neighborBooked: 'Available at Sanwer Hub'
+        }
+      ];
+
+      let SMS_STORE = [
+        {
+          id: 'sms-1',
+          sender: 'VM-KSNATH',
+          time: 'Today 08:32 AM',
+          crop: 'Wheat (गेहूं)',
+          text: 'प्रिय किसान, आज इंदौर APMC में गेहूं का मॉडल भाव ₹2,610/क्विंटल (+₹45) दर्ज हुआ। न्यूनतम ₹2,420, अधिकतम ₹2,750। मंडी एक्सप्रेस पूल्ड शेयरिंग के लिए 1800-889-4455 डायल करें। - किसान साथी'
+        }
+      ];
+
+      const APP_STATE = {
+        currentScreen: 'mandi-bhav',
+        selectedCrop: 'gehun',
+        selectedState: 'MP',
+        selectedDistrict: 'Indore',
+        transportBags: 15,
+        pickupCluster: 'sanwer_hub',
+        destMandi: 'indore',
+        clusterDiscountActive: true,
+        callStatus: 'idle',
+        callDurationSec: 0,
+        callTimerInterval: null,
+        activeBooking: {
+          id: 'KS-7821',
+          driver: 'Mahinder Singh',
+          vehicle: 'Tata Ace Bolero Maxi (MP-09-GA-4821)',
+          etaMins: 38
+        }
+      };
+
+      // 2. AUDIO SYNTHESIS
+      let audioCtx = null;
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) audioCtx = new AudioContext();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      const DTMF_FREQS = {
+        '1': [697, 1209],
+        '2': [697, 1336],
+        '3': [697, 1477],
+        '4': [770, 1209],
+        '5': [770, 1336],
+        '6': [770, 1477],
+        '7': [852, 1209],
+        '8': [852, 1336],
+        '9': [852, 1477],
+        '*': [941, 1209],
+        '0': [941, 1336],
+        '#': [941, 1477]
+      };
+
+      function playDTMFTone(key) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const freqs = DTMF_FREQS[key] || [400, 450];
+          const duration = 0.18;
+
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gainNode = ctx.createGain();
+
+          osc1.type = 'sine';
+          osc2.type = 'sine';
+          osc1.frequency.value = freqs[0];
+          osc2.frequency.value = freqs[1];
+
+          gainNode.gain.setValueAtTime(0.12, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+          osc1.connect(gainNode);
+          osc2.connect(gainNode);
+          gainNode.connect(ctx.destination);
+
+          osc1.start();
+          osc2.start();
+          osc1.stop(ctx.currentTime + duration);
+          osc2.stop(ctx.currentTime + duration);
+        } catch (e) {
+          console.log('Audio fallback', e);
+        }
+      }
+
+      function playRingTone(onComplete) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) {
+            if (onComplete) setTimeout(onComplete, 1600);
+            return;
+          }
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gainNode = ctx.createGain();
+
+          osc1.frequency.value = 400;
+          osc2.frequency.value = 450;
+          gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+
+          osc1.connect(gainNode);
+          osc2.connect(gainNode);
+          gainNode.connect(ctx.destination);
+
+          osc1.start();
+          osc2.start();
+
+          gainNode.gain.setValueAtTime(0.09, ctx.currentTime + 1.2);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.4);
+          osc1.stop(ctx.currentTime + 1.4);
+          osc2.stop(ctx.currentTime + 1.4);
+
+          setTimeout(() => {
+            if (onComplete) onComplete();
+          }, 1500);
+        } catch (e) {
+          if (onComplete) setTimeout(onComplete, 1500);
+        }
+      }
+
+      function speakVoicePrompt(textHindi) {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(textHindi);
+          utterance.rate = 0.95;
+          utterance.pitch = 1.0;
+          utterance.lang = 'hi-IN';
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+
+      // 3. CLOCK & NAVIGATION
+      function updateClock() {
+        const now = new Date();
+        const hrs = String(now.getHours() % 12 || 12).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const str = `${hrs}:${mins}`;
+        const clockEl = document.getElementById('current-clock');
+        const lcdTimeEl = document.getElementById('ivrs-lcd-time');
+        if (clockEl) clockEl.innerText = str;
+        if (lcdTimeEl) lcdTimeEl.innerText = str;
+      }
+      setInterval(updateClock, 30000);
+      updateClock();
+
+      function switchScreen(screenKey) {
+        APP_STATE.currentScreen = screenKey;
+        
+        ['mandi-bhav', 'transport', 'machinery', 'ivrs'].forEach(key => {
+          const el = document.getElementById(`screen-${key}`);
+          if (el) {
+            if (key === screenKey) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+          }
+        });
+
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+          const target = btn.getAttribute('data-screen');
+          const indicator = btn.querySelector('.tab-indicator');
+          if (target === screenKey) {
+            btn.classList.remove('text-slate-500');
+            btn.classList.add('text-[#1B4D3E]', 'font-bold');
+            if (indicator) {
+              indicator.classList.remove('bg-transparent');
+              indicator.classList.add('bg-[#1B4D3E]');
+            }
+          } else {
+            btn.classList.remove('text-[#1B4D3E]', 'font-bold');
+            btn.classList.add('text-slate-500');
+            if (indicator) {
+              indicator.classList.remove('bg-[#1B4D3E]');
+              indicator.classList.add('bg-transparent');
+            }
+          }
+        });
+
+        const main = document.getElementById('screen-container');
+        if (main) main.scrollTop = 0;
+
+        if (screenKey === 'transport') {
+          recalculateTransportCosts();
+        } else if (screenKey === 'machinery') {
+          renderMachineryCards();
+        }
+      }
+
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchScreen(btn.getAttribute('data-screen'));
+        });
+      });
+
+      const ctaTransport = document.getElementById('cta-go-transport');
+      if (ctaTransport) {
+        ctaTransport.addEventListener('click', () => switchScreen('transport'));
+      }
+
+      const headerCallBtn = document.getElementById('header-call-btn');
+      if (headerCallBtn) {
+        headerCallBtn.addEventListener('click', () => {
+          switchScreen('ivrs');
+          triggerMissedCallFlow();
+        });
+      }
+
+      const headerBell = document.getElementById('header-sms-bell');
+      if (headerBell) {
+        headerBell.addEventListener('click', () => {
+          switchScreen('ivrs');
+          const smsList = document.getElementById('sms-inbox-list');
+          if (smsList) smsList.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      // 4. SCREEN 1: MANDI BHAV
+      function initMandiBhav() {
+        const DISTRICTS = {
+          MP: ['Indore (इंदौर)', 'Ujjain (उज्जैन)', 'Dewas (देवास)', 'Dhar (धार)', 'Sehore (सीहोर)'],
+          RJ: ['Kota (कोटा)', 'Baran (बारां)', 'Sri Ganganagar (श्री गंगानगर)'],
+          UP: ['Agra (आगरा)', 'Hapur (हापुड़)', 'Aligarh (अलीगढ़)', 'Mathura (मथुरा)'],
+          PB: ['Khanna (खन्ना)', 'Rajpura (राजपुरा)', 'Ludhiana (लुधियाना)'],
+          HR: ['Karnal (करनाल)', 'Kaithal (कैथल)', 'Kurukshetra (कुरुक्षेत्र)']
+        };
+
+        const stateSelect = document.getElementById('filter-state');
+        const distSelect = document.getElementById('filter-district');
+
+        function populateDistricts() {
+          const st = stateSelect.value;
+          distSelect.innerHTML = '';
+          (DISTRICTS[st] || DISTRICTS.MP).forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d;
+            opt.innerText = d;
+            distSelect.appendChild(opt);
+          });
+        }
+        stateSelect.addEventListener('change', () => {
+          populateDistricts();
+          renderMandiCards();
+        });
+        distSelect.addEventListener('change', () => {
+          renderMandiCards();
+        });
+        populateDistricts();
+
+        const chipsContainer = document.getElementById('crop-filter-chips');
+        chipsContainer.innerHTML = '';
+        Object.values(CROPS_DATA).forEach(crop => {
+          const btn = document.createElement('button');
+          btn.className = `crop-chip px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-all border ${
+            crop.id === APP_STATE.selectedCrop
+              ? 'bg-[#1B4D3E] text-white border-[#1B4D3E] shadow-sm'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200'
+          }`;
+          btn.innerHTML = `${crop.icon} ${crop.nameEn.split(' ')[0]} <span class="text-[10px] opacity-80">(${crop.nameHi})</span>`;
+          btn.addEventListener('click', () => {
+            APP_STATE.selectedCrop = crop.id;
+            document.querySelectorAll('.crop-chip').forEach(c => {
+              c.className = 'crop-chip px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-all border bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200';
+            });
+            btn.className = 'crop-chip px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-all border bg-[#1B4D3E] text-white border-[#1B4D3E] shadow-sm';
+            renderMandiCards();
+          });
+          chipsContainer.appendChild(btn);
+        });
+
+        renderMandiCards();
+      }
+
+      function renderMandiCards() {
+        const crop = CROPS_DATA[APP_STATE.selectedCrop];
+        const container = document.getElementById('mandi-cards-list');
+        const selectedCropLabel = document.getElementById('selected-crop-label');
+        if (selectedCropLabel) {
+          selectedCropLabel.innerText = `${crop.nameEn} (${crop.nameHi})`;
+        }
+        const mspBtn = document.getElementById('btn-msp-info');
+        if (mspBtn) {
+          mspBtn.innerText = crop.msp > 0 ? `Govt MSP: ₹${crop.msp.toLocaleString('en-IN')}` : 'Open Market Pricing';
+        }
+
+        const topMandi = crop.mandis.find(m => m.isTopProfit) || crop.mandis[0];
+        const heroName = document.getElementById('hero-best-mandi-name');
+        const heroDetail = document.getElementById('hero-best-mandi-detail');
+        const heroGain = document.getElementById('hero-best-mandi-gain');
+
+        if (heroName) heroName.innerText = topMandi.name;
+        if (heroDetail) heroDetail.innerText = topMandi.profitNote;
+        if (heroGain) heroGain.innerText = `₹${topMandi.modalPrice.toLocaleString('en-IN')}/qtl`;
+
+        container.innerHTML = '';
+        crop.mandis.forEach(m => {
+          const card = document.createElement('div');
+          card.className = `bg-white rounded-2xl p-4 shadow-sm border transition-all ${
+            m.isTopProfit ? 'border-amber-400/90 ring-1 ring-amber-400/30' : 'border-slate-200/90'
+          }`;
+
+          const trendBadge = m.trend > 0
+            ? `<span class="inline-flex items-center gap-0.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 tabular-nums">▲ +₹${m.trend}</span>`
+            : m.trend < 0
+            ? `<span class="inline-flex items-center gap-0.5 text-[11px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-full border border-red-200 tabular-nums">▼ -₹${Math.abs(m.trend)}</span>`
+            : `<span class="inline-flex items-center gap-0.5 text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">● Stable</span>`;
+
+          const topBadge = m.isTopProfit
+            ? `<div class="bg-amber-100/90 text-amber-900 font-bold text-[10px] px-2 py-0.5 rounded-md inline-flex items-center gap-1 mb-2">
+                 <span>⭐</span> Highest Profit Recommendation · सर्वोत्तम भाव
+               </div>`
+            : '';
+
+          card.innerHTML = `
+            ${topBadge}
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-slate-900 leading-snug">${m.name}</h4>
+                <div class="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5">
+                  <span>${m.district}</span>
+                  <span>·</span>
+                  <span>${m.distanceKm} km from Sanwer</span>
+                  <span>·</span>
+                  <span>${m.quality}</span>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                ${trendBadge}
+                <span class="block text-[10px] text-slate-400 mt-1">Arrivals: ${m.arrivals}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 bg-slate-50 rounded-xl p-2.5 mt-3 text-center border border-slate-100">
+              <div>
+                <span class="text-[10px] text-slate-500 block">Min (न्यूनतम)</span>
+                <span class="text-xs font-bold text-slate-700 font-mono tabular-nums">₹${m.minPrice.toLocaleString('en-IN')}</span>
+              </div>
+              <div class="border-x border-slate-200">
+                <span class="text-[10px] font-bold text-[#1B4D3E] block">Modal (मॉडल भाव)</span>
+                <span class="text-sm font-extrabold text-[#1B4D3E] font-mono tabular-nums">₹${m.modalPrice.toLocaleString('en-IN')}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block">Max (अधिकतम)</span>
+                <span class="text-xs font-bold text-slate-700 font-mono tabular-nums">₹${m.maxPrice.toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+
+            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+              <div class="text-[11px] text-slate-600">
+                <span>Pooled Freight: </span>
+                <strong class="text-emerald-800">₹${m.transportCostPooled}/bag</strong>
+                <span class="text-slate-400"> (Solo: ₹${m.transportCostSolo})</span>
+              </div>
+              <button class="btn-book-from-mandi px-3 py-1.5 bg-[#1B4D3E] hover:bg-[#143D31] text-white rounded-xl text-[11px] font-semibold active:scale-95 transition-all" data-mandi="${m.id}">
+                Book Transport ➔
+              </button>
+            </div>
+          `;
+
+          card.querySelector('.btn-book-from-mandi').addEventListener('click', () => {
+            switchScreen('transport');
+            const destSelect = document.getElementById('dest-mandi-select');
+            if (destSelect) {
+              if (m.id.includes('ujjain')) destSelect.value = 'ujjain';
+              else if (m.id.includes('dewas')) destSelect.value = 'dewas';
+              else destSelect.value = 'indore';
+              recalculateTransportCosts();
+            }
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      // 5. SCREEN 2: MANDI EXPRESS
+      function initTransportScreen() {
+        const slider = document.getElementById('load-slider');
+        const bagsDisplay = document.getElementById('load-bags-display');
+        const qtlDisplay = document.getElementById('load-qtl-display');
+        const btnMinus = document.getElementById('btn-bags-minus');
+        const btnPlus = document.getElementById('btn-bags-plus');
+        const destSelect = document.getElementById('dest-mandi-select');
+        const clusterSelect = document.getElementById('pickup-cluster-select');
+
+        function updateBags(val) {
+          const clamped = Math.max(5, Math.min(60, Number(val)));
+          slider.value = clamped;
+          APP_STATE.transportBags = clamped;
+          bagsDisplay.innerText = clamped;
+          qtlDisplay.innerText = (clamped * 0.5).toFixed(1);
+          recalculateTransportCosts();
+        }
+
+        slider.addEventListener('input', (e) => updateBags(e.target.value));
+        btnMinus.addEventListener('click', () => updateBags(Number(slider.value) - 5));
+        btnPlus.addEventListener('click', () => updateBags(Number(slider.value) + 5));
+
+        document.querySelectorAll('.preset-load').forEach(btn => {
+          btn.addEventListener('click', () => {
+            updateBags(btn.getAttribute('data-bags'));
+          });
+        });
+
+        destSelect.addEventListener('change', recalculateTransportCosts);
+        clusterSelect.addEventListener('change', recalculateTransportCosts);
+
+        const btnConfirm = document.getElementById('btn-confirm-transport-booking');
+        btnConfirm.addEventListener('click', () => {
+          btnConfirm.innerHTML = '<span>⏳</span> Processing Booking...';
+          btnConfirm.disabled = true;
+
+          setTimeout(() => {
+            btnConfirm.innerHTML = '<span>✅</span> Slot Confirmed! / बुकिंग सफल';
+            btnConfirm.className = 'w-full py-3.5 bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-md';
+            
+            const bags = APP_STATE.transportBags;
+            const destName = destSelect.options[destSelect.selectedIndex].text.split('(')[0].trim();
+            const pooledAmt = document.getElementById('pooled-cost-display').innerText;
+            const smsText = `प्रिय किसान, आपकी मंडी एक्सप्रेस बुकिंग #${APP_STATE.activeBooking.id} स्वीकृत हो गई है। ${bags} बोरी ${destName} हेतु। ड्राइवर: ${APP_STATE.activeBooking.driver} (बोलेरो मैक्सी)। कुल भाड़ा: ${pooledAmt} (मंडी गेट पर देय)। ETA 38 मिनट। - KisanSaathi`;
+            
+            triggerSMSReceipt(smsText);
+
+            const activeCard = document.getElementById('transport-active-card');
+            if (activeCard) {
+              activeCard.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 900);
+        });
+
+        const callDriverBtn = document.getElementById('call-driver-btn');
+        if (callDriverBtn) {
+          callDriverBtn.addEventListener('click', () => {
+            switchScreen('ivrs');
+            triggerDriverCall();
+          });
+        }
+      }
+
+      function recalculateTransportCosts() {
+        const bags = APP_STATE.transportBags;
+        const destSelect = document.getElementById('dest-mandi-select');
+        const selectedOpt = destSelect.options[destSelect.selectedIndex];
+        const basePerBag = Number(selectedOpt.getAttribute('data-base') || 70);
+        const soloFixed = Number(selectedOpt.getAttribute('data-solobase') || 1500);
+
+        const soloCost = soloFixed;
+        const pooledCost = bags * basePerBag;
+        const savings = Math.max(0, soloCost - pooledCost);
+        const percent = Math.round((savings / soloCost) * 100);
+
+        document.getElementById('solo-cost-display').innerText = `₹${soloCost.toLocaleString('en-IN')}`;
+        document.getElementById('pooled-cost-display').innerText = `₹${pooledCost.toLocaleString('en-IN')}`;
+        document.getElementById('net-savings-display').innerText = `₹${savings.toLocaleString('en-IN')}`;
+        document.getElementById('savings-percent-display').innerText = `(${percent}% Farmer Savings · बचत)`;
+      }
+
+      // 6. SCREEN 3: SHARED MACHINERY
+      function initMachineryScreen() {
+        const toggle = document.getElementById('cluster-discount-toggle');
+        const note = document.getElementById('cluster-active-note');
+
+        toggle.addEventListener('change', () => {
+          APP_STATE.clusterDiscountActive = toggle.checked;
+          if (note) {
+            note.style.display = toggle.checked ? 'flex' : 'none';
+          }
+          renderMachineryCards();
+        });
+
+        renderMachineryCards();
+        initMachineModal();
+      }
+
+      function renderMachineryCards() {
+        const container = document.getElementById('machinery-cards-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        MACHINERY_DATA.forEach(mach => {
+          const discountPct = APP_STATE.clusterDiscountActive ? 0.15 : 0;
+          const discountedRate = Math.round(mach.baseHourlyRate * (1 - discountPct));
+          const savingsPerHr = mach.baseHourlyRate - discountedRate;
+
+          const card = document.createElement('div');
+          card.className = 'bg-white rounded-2xl p-4 shadow-sm border border-slate-200/90 space-y-3';
+
+          const rateHtml = APP_STATE.clusterDiscountActive
+            ? `<div class="text-right">
+                 <span class="text-xs text-slate-400 line-through">₹${mach.baseHourlyRate}/hr</span>
+                 <span class="block text-base font-extrabold text-[#1B4D3E] font-mono tabular-nums">₹${discountedRate}/hr</span>
+                 <span class="text-[10px] text-amber-700 font-bold bg-amber-100 px-1.5 py-0.5 rounded">Save ₹${savingsPerHr}/hr</span>
+               </div>`
+            : `<div class="text-right">
+                 <span class="text-base font-extrabold text-[#1B4D3E] font-mono tabular-nums">₹${mach.baseHourlyRate}/hr</span>
+                 <span class="block text-[10px] text-slate-500">Standard Rate</span>
+               </div>`;
+
+          card.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <span class="text-2xl w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200">${mach.icon}</span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900 leading-snug">${mach.nameEn}</h4>
+                  <p class="text-[11px] text-slate-500">${mach.nameHi}</p>
+                  <span class="text-[10px] text-emerald-800 font-medium bg-emerald-50 px-2 py-0.5 rounded-md inline-block mt-1">${mach.category}</span>
+                </div>
+              </div>
+              ${rateHtml}
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-2.5 text-[11px] text-slate-600 space-y-1 border border-slate-100">
+              <div class="flex items-center justify-between">
+                <span>⚙️ ${mach.specs}</span>
+                <span class="font-bold text-slate-700">★ ${mach.rating}</span>
+              </div>
+              <p class="text-[10px] text-slate-500">🚜 ${mach.features}</p>
+              ${APP_STATE.clusterDiscountActive ? `<p class="text-[10px] text-amber-800 font-medium border-t border-slate-200/60 pt-1">🤝 Neighbor scheduled: <strong>${mach.neighborBooked}</strong></p>` : ''}
+            </div>
+
+            <button class="btn-open-machine-booking w-full py-2.5 bg-[#1B4D3E] hover:bg-[#143D31] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <span>📅</span> Book Machine Slot / मशीन बुक करें
+            </button>
+          `;
+
+          card.querySelector('.btn-open-machine-booking').addEventListener('click', () => {
+            openMachineBookingModal(mach);
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      let selectedMachineryForBooking = null;
+      function initMachineModal() {
+        const modal = document.getElementById('machine-booking-modal');
+        const closeBtn = document.getElementById('close-machine-modal');
+        const slider = document.getElementById('modal-hours-slider');
+        const submitBtn = document.getElementById('btn-submit-machine-booking');
+
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+
+        slider.addEventListener('input', (e) => {
+          const hrs = e.target.value;
+          document.getElementById('modal-hours-display').innerText = `${hrs} Hours (${hrs} घंटे)`;
+          updateModalCosts();
+        });
+
+        document.querySelectorAll('.date-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            document.querySelectorAll('.date-chip').forEach(c => {
+              c.className = 'date-chip py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-center';
+            });
+            chip.className = 'date-chip py-2 rounded-xl border border-[#1B4D3E] bg-emerald-50 text-[#1B4D3E] font-bold text-center';
+          });
+        });
+
+        submitBtn.addEventListener('click', () => {
+          submitBtn.innerHTML = '<span>⏳</span> Securing Machine Slot...';
+          submitBtn.disabled = true;
+
+          setTimeout(() => {
+            modal.classList.add('hidden');
+            submitBtn.innerHTML = 'Confirm Machine Booking / बुकिंग पक्की करें';
+            submitBtn.disabled = false;
+
+            const hours = slider.value;
+            const total = document.getElementById('modal-total-cost').innerText;
+            const smsMsg = `प्रिय किसान, आपकी साझा कृषि मशीनरी बुकिंग स्वीकृत है: ${selectedMachineryForBooking.nameEn} (${hours} घंटे)। कुल अनुमान: ${total}। ऑपरेटर कल सुबह 7:30 बजे आपके खेत पर पहुंचेंगे। - KisanSaathi`;
+            triggerSMSReceipt(smsMsg);
+          }, 800);
+        });
+      }
+
+      function openMachineBookingModal(mach) {
+        selectedMachineryForBooking = mach;
+        const modal = document.getElementById('machine-booking-modal');
+        document.getElementById('modal-machine-icon').innerText = mach.icon;
+        document.getElementById('modal-machine-name').innerText = mach.nameEn;
+        document.getElementById('modal-base-rate').innerText = `₹${mach.baseHourlyRate}/hr`;
+
+        updateModalCosts();
+        modal.classList.remove('hidden');
+      }
+
+      function updateModalCosts() {
+        if (!selectedMachineryForBooking) return;
+        const hours = Number(document.getElementById('modal-hours-slider').value);
+        const baseRate = selectedMachineryForBooking.baseHourlyRate;
+        const isCluster = APP_STATE.clusterDiscountActive;
+        const discountAmt = isCluster ? Math.round(baseRate * 0.15) : 0;
+        const hourlyFinal = baseRate - discountAmt;
+        const total = hourlyFinal * hours;
+
+        const discountRow = document.getElementById('modal-discount-row');
+        if (isCluster) {
+          discountRow.style.display = 'flex';
+          document.getElementById('modal-discount-amt').innerText = `-₹${discountAmt * hours} (-15%)`;
+        } else {
+          discountRow.style.display = 'none';
+        }
+
+        document.getElementById('modal-total-cost').innerText = `₹${total.toLocaleString('en-IN')}`;
+      }
+
+      // 7. SCREEN 4: FEATURE PHONE & IVRS SIMULATOR
+      function initIVRSSimulator() {
+        document.getElementById('btn-physical-call').addEventListener('click', triggerMissedCallFlow);
+        document.getElementById('btn-physical-end').addEventListener('click', endActiveCall);
+        document.getElementById('btn-answer-call').addEventListener('click', answerIncomingCall);
+        document.getElementById('btn-decline-call').addEventListener('click', endActiveCall);
+
+        document.querySelectorAll('.dtmf-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            handleDTMFKey(btn.getAttribute('data-key'));
+          });
+        });
+
+        renderSMSInbox();
+      }
+
+      function triggerMissedCallFlow() {
+        setLCDView('calling');
+        playDTMFTone('1');
+
+        document.getElementById('lcd-calling-sub').innerText = 'Ringing (घंटी जा रही है)...';
+        playRingTone(() => {
+          playRingTone(() => {
+            document.getElementById('lcd-calling-sub').innerText = 'Call Ended. Zero Cost.';
+            setTimeout(() => {
+              setLCDView('idle');
+              setTimeout(() => {
+                triggerIncomingCallback();
+              }, 2500);
+            }, 1000);
+          });
+        });
+      }
+
+      function triggerIncomingCallback() {
+        setLCDView('incoming');
+        playRingTone();
+      }
+
+      function answerIncomingCall() {
+        setLCDView('incall');
+        APP_STATE.callDurationSec = 0;
+        startCallTimer();
+
+        const welcomeHindi = "नमस्ते किसान भाई! किसान साथी मंडी सेवा में आपका स्वागत है। गेहूं के भाव के लिए 1 दबाएं। सरसों के लिए 2 दबाएं। चना के लिए 3 दबाएं। परिवहन वाहन के लिए 4 दबाएं।";
+        document.getElementById('lcd-voice-transcript').innerText = `"${welcomeHindi}"`;
+        speakVoicePrompt(welcomeHindi);
+      }
+
+      function triggerDriverCall() {
+        setLCDView('incall');
+        APP_STATE.callDurationSec = 0;
+        startCallTimer();
+
+        const driverHindi = "नमस्ते किसान भाई! मैं महिंदर सिंह बोल रहा हूँ। आपका बोलेरो पिकअप वाहन 38 मिनट में सांवेर पॉइंट ए पर पहुँच रहा है। कृपया 15 बोरियाँ तैयार रखें।";
+        document.getElementById('lcd-voice-transcript').innerText = `"${driverHindi}"`;
+        speakVoicePrompt(driverHindi);
+      }
+
+      function endActiveCall() {
+        if (APP_STATE.callTimerInterval) {
+          clearInterval(APP_STATE.callTimerInterval);
+        }
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        playDTMFTone('#');
+        setLCDView('idle');
+      }
+
+      function startCallTimer() {
+        if (APP_STATE.callTimerInterval) clearInterval(APP_STATE.callTimerInterval);
+        APP_STATE.callTimerInterval = setInterval(() => {
+          APP_STATE.callDurationSec++;
+          const mins = String(Math.floor(APP_STATE.callDurationSec / 60)).padStart(2, '0');
+          const secs = String(APP_STATE.callDurationSec % 60).padStart(2, '0');
+          const timerEl = document.getElementById('call-timer');
+          if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+        }, 1000);
+      }
+
+      function setLCDView(viewName) {
+        ['idle', 'calling', 'incoming', 'incall'].forEach(v => {
+          const el = document.getElementById(`lcd-${v}-view`);
+          if (el) {
+            if (v === viewName) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+          }
+        });
+      }
+
+      function handleDTMFKey(key) {
+        playDTMFTone(key);
+
+        const transcriptEl = document.getElementById('lcd-voice-transcript');
+        let responseHindi = "";
+        let responseSMS = "";
+
+        if (key === '1') {
+          responseHindi = "आज इंदौर मंडी में गेहूं का भाव ₹2,610 प्रति क्विंटल है (+₹45 बढ़त)। आपके फोन पर SMS भेज दिया गया है।";
+          responseSMS = "VM-KSNATH: आज इंदौर मंडी में गेहूं (लोकवन) भाव: न्यूनतम ₹2,420, अधिकतम ₹2,750, मॉडल ₹2,610/क्विंटल। वाहन पूलिंग हेतु 1800-889-4455 पर 4 दबाएं। - KisanSaathi";
+        } else if (key === '2') {
+          responseHindi = "आज सरसों का मॉडल भाव ₹5,640 प्रति क्विंटल है, जो कल से ₹90 अधिक है।";
+          responseSMS = "VM-KSNATH: आज इंदौर APMC सरसों (42% तेल) भाव: मॉडल ₹5,640/क्विंटल (+₹90)। - KisanSaathi";
+        } else if (key === '3') {
+          responseHindi = "चना का भाव आज ₹6,120 प्रति क्विंटल है।";
+          responseSMS = "VM-KSNATH: आज चना (देसी) मॉडल भाव: ₹6,120/क्विंटल (+₹80)। - KisanSaathi";
+        } else if (key === '4') {
+          responseHindi = "मंडी एक्सप्रेस वाहन सांवेर क्लस्टर में 38 मिनट में उपलब्ध है। केवल ₹70 प्रति बोरी।";
+          responseSMS = "VM-KSNATH: मंडी एक्सप्रेस शेयरिंग वाहन उपलब्ध है। सांवेर से इंदौर APMC भाड़ा ₹70/बोरी। पुष्टि हेतु 1 दबाएं। - KisanSaathi";
+        } else if (key === '5') {
+          responseHindi = "साझा ट्रैक्टर 45HP कल सुबह 15% क्लस्टर छूट पर ₹552 प्रति घंटा उपलब्ध है।";
+          responseSMS = "VM-KSNATH: कृषि यंत्र स्लॉट: महिंद्रा 45HP ट्रैक्टर उपलब्ध कल सुबह 7AM (₹552/घंटा)। - KisanSaathi";
+        } else {
+          responseHindi = `आपने ${key} दबाया। मुख्य मेनू पर लौटने हेतु * दबाएं।`;
+        }
+
+        if (transcriptEl) {
+          transcriptEl.innerText = `[Key ${key}]: "${responseHindi}"`;
+        }
+        speakVoicePrompt(responseHindi);
+
+        if (responseSMS) {
+          triggerSMSReceipt(responseSMS);
+        }
+      }
+
+      // 8. SMS ENGINE
+      function triggerSMSReceipt(text) {
+        const newSMS = {
+          id: `sms-${Date.now()}`,
+          sender: 'VM-KSNATH',
+          time: 'Just Now',
+          crop: 'KisanSaathi Official',
+          text: text
+        };
+        SMS_STORE.unshift(newSMS);
+        renderSMSInbox();
+
+        const badge = document.getElementById('sms-badge-count');
+        if (badge) badge.innerText = SMS_STORE.length;
+
+        const toast = document.getElementById('sms-toast-banner');
+        const toastText = document.getElementById('sms-toast-text');
+        if (toast && toastText) {
+          toastText.innerText = text;
+          toast.classList.remove('hidden');
+
+          setTimeout(() => {
+            toast.classList.add('hidden');
+          }, 6000);
+        }
+      }
+
+      const dismissBtn = document.getElementById('dismiss-sms-toast');
+      if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => {
+          document.getElementById('sms-toast-banner').classList.add('hidden');
+        });
+      }
+
+      function renderSMSInbox() {
+        const container = document.getElementById('sms-inbox-list');
+        if (!container) return;
+        container.innerHTML = '';
+
+        SMS_STORE.forEach(sms => {
+          const item = document.createElement('div');
+          item.className = 'bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1';
+          item.innerHTML = `
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-slate-900 flex items-center gap-1">
+                <span>📩</span> ${sms.sender}
+              </span>
+              <span class="text-slate-400 font-mono text-[10px]">${sms.time}</span>
+            </div>
+            <p class="text-slate-700 font-sans leading-relaxed text-[11px]">${sms.text}</p>
+          `;
+          container.appendChild(item);
+        });
+      }
+
+      // 9. DOM INITIALIZATION
+      window.addEventListener('DOMContentLoaded', () => {
+        initMandiBhav();
+        initTransportScreen();
+        initMachineryScreen();
+        initIVRSSimulator();
+
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
+  </body>
+</html>
